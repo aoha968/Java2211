@@ -51,15 +51,15 @@ public class Main {
         System.out.println("カイリューの図鑑説明：" + pokemon.get("カイリュー"));
 
         try {
-            // 強制的にUnKnownPokemonExceptionの例外を発生させる
+            // 強制的にUnknownPokemonExceptionの例外を発生させる
             System.out.println("*** 未知のポケモンの図鑑説明を表示させる ***");
-            System.out.println("*** UnKnownPokemonException例外処理開始 ***");
-            throw new UnKnownPokemonException("E0001", "未知のポケモンです。");
-        } catch (UnKnownPokemonException ex) {
-            // UnKnownPokemonException発生時
+            System.out.println("*** UnknownPokemonException例外処理開始 ***");
+            throw new UnknownPokemonException("E0001", "未知のポケモンです。");
+        } catch (UnknownPokemonException ex) {
+            // UnknownPokemonException発生時
             System.out.println(ex.getCode() + ":" + ex.getMessage());   // 独自エラーコード/メッセージを表示
         } finally {
-            System.out.println("*** UnKnownPokemonException例外処理終了 ***");
+            System.out.println("*** UnknownPokemonException例外処理終了 ***");
         }
     }
 }
