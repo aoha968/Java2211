@@ -9,11 +9,10 @@ public class EnhancedForSample {
         List<String> result = new ArrayList<>();
 
         System.out.println("[拡張for文]名前にaが含まれるかを判定します。");
-        int nameIndex = 0;
         for (String name : names) {
-            System.out.print(names.get(nameIndex++) + "：");
+            System.out.print(name + "：");
             if (name.contains("a")) {
-                System.out.println(result.add(name));
+                System.out.println("true");
             } else {
                 System.out.println("false");
             }
