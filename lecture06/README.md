@@ -9,7 +9,7 @@
 
 ### プログラム仕様
  - http://localhost:8080/hello アクセス時に"hello world"と表示する
- - http://localhost:8080/currentTime?area="クエリパラメータ" アクセス時にクエリパラメータの現在時刻を表示する
+ - http://localhost:8080/current-time?area="クエリパラメータ" アクセス時にクエリパラメータの現在時刻を表示する
  - "現在の[クエリパラメータ]の日時はYYYY/MM/DD HH:MM" の形式で表示
 
 #### クエリパラメータ仕様

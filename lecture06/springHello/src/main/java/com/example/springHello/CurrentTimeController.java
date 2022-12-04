@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 @RestController
 public class CurrentTimeController {
-    @GetMapping("/currentTime")
+    @GetMapping("/current-time")
     public String currentTime(@RequestParam(value = "area", defaultValue = "japan") String area) {
         Date date = new Date();
         TimeZone timezone;
