@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.repository.EmployeeRepository;
+import net.javaguides.springboot.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,10 @@ public class EmployeeController {
     /** Employeeアクセス用リポジトリ */
     @Autowired
     private EmployeeRepository employeeRepository;
+    /** EmployeeService */
+    @Autowired
+    private EmployeeService service;
+
     /**
      * Employeeデータリストを取得する.
      * @return Employeeデータリスト
@@ -36,13 +41,13 @@ public class EmployeeController {
      */
     @GetMapping("{id}")
     public Employee getEmployeeById(@PathVariable long id){
-        Optional<Employee> employee = employeeRepository.findById(id);
-        if(employee.isPresent()) {
+        Optional<Employee> employeeId = service.getEmployeeId(id);
+        if(employeeId.isPresent()) {
             // 指定したIDをもつユーザーデータがあればそのユーザーデータを返す
-            return employee.get();
+            return employeeId.get();
         }else{
             // 指定したIDをもつユーザーデータがなければnullを返す
-            return employee.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
+            return employeeId.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
         }
     }
 
@@ -53,13 +58,12 @@ public class EmployeeController {
      */
     @PostMapping
     public Employee createEmployee(@Valid @RequestBody Employee employee) {
-        Optional<Employee> employeeId = employeeRepository.findById(employee.getId());
         if(employeeRepository.countByEmailId(employee.getEmailId()) == 0){
             // メールアドレスが未登録であれば登録する
             return employeeRepository.save(employee);
         }else{
             // 登録済みであればエラーを返す
-            return employeeId.orElseThrow(() -> new ResourceNotFoundException("Employee is registered email:" + employee.getEmailId()));
+            return service.getEmployeeId(employee.getId()).orElseThrow(() -> new ResourceNotFoundException("Employee is registered email:" + employee.getEmailId()));
         }
     }
 
@@ -96,5 +100,4 @@ public class EmployeeController {
             employee.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
         }
     }
-
 }
