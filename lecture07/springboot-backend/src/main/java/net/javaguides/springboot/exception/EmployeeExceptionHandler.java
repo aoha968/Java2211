@@ -16,6 +16,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 // 例外処理を行うハンドラークラス
 @ControllerAdvice
 public class EmployeeExceptionHandler {
+    /** デバッグフラグ
+     *  デバッグOFF:0
+     *  デバッグON:0以外
+     *  デバッグON時はスタックトレースを出力する
+     */
+    private static final int DEBUG = 0;
+
     /**
      * APIのURLが不正の場合のエラー処理を行う
      * @param ex MethodArgumentTypeMismatch例外
@@ -63,11 +70,15 @@ public class EmployeeExceptionHandler {
      * @return スタックトレースログの文字列
      */
     private String getStackTraceLog(StackTraceElement[] stackArray) {
-        StringBuffer detail = new StringBuffer();
-        for(StackTraceElement stackTraceElement : stackArray) {
-            detail.append(stackTraceElement);
+        if(DEBUG != 0){
+            StringBuffer detail = new StringBuffer();
+            for(StackTraceElement stackTraceElement : stackArray) {
+                detail.append(stackTraceElement);
+            }
+            return detail.toString();
+        }else{
+            return "";
         }
-        return detail.toString();
     }
 
     /**
