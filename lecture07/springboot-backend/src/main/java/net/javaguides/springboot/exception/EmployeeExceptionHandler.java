@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 // 例外処理を行うハンドラークラス
+@ControllerAdvice
 public class EmployeeExceptionHandler {
     /**
      * APIのURLが不正の場合のエラー処理を行う
