@@ -2,7 +2,6 @@ package net.javaguides.springboot.controller;
 
 import jakarta.validation.Valid;
 import net.javaguides.springboot.model.Employee;
-import net.javaguides.springboot.repository.EmployeeRepository;
 import net.javaguides.springboot.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +15,16 @@ import java.util.List;
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
 
-    /** Employeeアクセス用リポジトリ */
+    /**
+     * コンストラクタインジェクション
+     * "@Autowired"は、コンストラクタが1件のみかつSpring4.3以上であれば省略可能だがつけておく
+     * フィールドにfinalを使用することができて不変性を担保できるため、推奨される
+     */
+    private final EmployeeService service;
     @Autowired
-    private EmployeeRepository employeeRepository;
-    /** EmployeeService */
-    @Autowired
-    private EmployeeService service;
+    public EmployeeController(EmployeeService service) {
+        this.service = service;
+    }
 
     /**
      * Employeeデータリストを取得する
@@ -29,7 +32,7 @@ public class EmployeeController {
      */
     @GetMapping
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        return service.getAllEmployee();
     }
 
     /**
@@ -61,15 +64,8 @@ public class EmployeeController {
      */
     @PatchMapping("{id}")
     public Employee updateEmployee(@PathVariable long id, @Valid @RequestBody Employee updateEmployee) {
-        Employee employee = service.getEmployeeById(id);
-        if(employee != null) {
-            // 指定したIDをもつEmployeeデータがあれば更新する
-            updateEmployee.setId(id);
-            return employeeRepository.save(updateEmployee);
-        }else {
-            // 指定したIDをもつEmployeeデータがなければnullを返す
-            return null;
-        }
+        // 更新処理はserviceに任せる
+        return service.updateEmployee(id, updateEmployee);
     }
 
     /**
@@ -78,10 +74,7 @@ public class EmployeeController {
      */
     @DeleteMapping("{id}")
     public void deleteEmployee(@PathVariable long id) {
-        Employee employee = service.getEmployeeById(id);
-        // 指定したIDをもつEmployeeデータがあればそのユーザーデータを削除する
-        if(employee != null) {
-            employeeRepository.deleteById(id);
-        }
+        // 削除処理はserviceに任せる
+        service.deleteEmployee(id);
     }
 }

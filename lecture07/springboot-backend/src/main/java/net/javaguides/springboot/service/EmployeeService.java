@@ -5,8 +5,11 @@ import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +24,14 @@ public class EmployeeService {
     @Autowired
     public EmployeeService(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
+    }
+
+    /**
+     * 全てのEmployeeデータを取得する
+     * @return 全てのEmployeeデータ
+     */
+    public List<Employee> getAllEmployee(){
+        return employeeRepository.findAll();
     }
 
     /**
@@ -46,5 +57,36 @@ public class EmployeeService {
             // 登録済みであればエラーを返す
             throw new DuplicateKeyException("Employee is registered email:" + employee.getEmailId());
         }
+    }
+
+    /**
+     * Employeeデータを更新する
+     * @param id ID
+     * @param updateEmployee 更新するEmployeeデータ
+     * @return Employeeデータ
+     */
+    public Employee updateEmployee(long id, Employee updateEmployee) {
+        // idに紐づくEmployeeがなければコール側でエラー返却してくれる
+        Employee employee = getEmployeeById(id);
+        if(employeeRepository.countByEmailId(updateEmployee.getEmailId()) == 0) {
+            // 指定したIDをもつ かつ 同じメールアドレスが登録されていなければ、Employeeデータがあれば更新する
+            updateEmployee.setId(id);
+            // 更新したEmployeeを返却
+            return employeeRepository.save(updateEmployee);
+        }else{
+            // 登録済みであればエラーを返す
+            throw new DuplicateKeyException("Employee is registered email:" + employee.getEmailId());
+        }
+    }
+
+    /**
+     * Employeeデータを削除する
+     * @param id ID
+     * @return Employeeデータ
+     */
+    public void deleteEmployee(long id) {
+        Employee employee = getEmployeeById(id);   // idに紐づくEmployeeがなければコール側でエラー返却してくれる
+        employeeRepository.deleteById(id);         // 指定したIDをもつEmployeeデータがあればそのユーザーデータを削除する
+        throw new ResponseStatusException(HttpStatus.NO_CONTENT);   // とりあえず204のレスポンスボディなしで返却
     }
 }
