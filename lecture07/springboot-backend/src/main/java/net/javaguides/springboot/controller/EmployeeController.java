@@ -1,7 +1,6 @@
 package net.javaguides.springboot.controller;
 
 import jakarta.validation.Valid;
-import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.repository.EmployeeRepository;
 import net.javaguides.springboot.service.EmployeeService;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Rest API定義クラス
@@ -26,7 +24,7 @@ public class EmployeeController {
     private EmployeeService service;
 
     /**
-     * Employeeデータリストを取得する.
+     * Employeeデータリストを取得する
      * @return Employeeデータリスト
      */
     @GetMapping
@@ -35,69 +33,55 @@ public class EmployeeController {
     }
 
     /**
-     * 指定したIDをもつEmployeeデータを取得する.
+     * 指定したIDをもつEmployeeデータを取得する
      * @param id ID
-     * @return 指定したIDをもつユーザーデータ
+     * @return 指定したIDをもつEmployeeデータ
      */
     @GetMapping("{id}")
     public Employee getEmployeeById(@PathVariable long id){
-        Optional<Employee> employeeId = service.getEmployeeId(id);
-        if(employeeId.isPresent()) {
-            // 指定したIDをもつユーザーデータがあればそのユーザーデータを返す
-            return employeeId.get();
-        }else{
-            // 指定したIDをもつユーザーデータがなければnullを返す
-            return employeeId.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
-        }
+        return service.getEmployeeById(id);
     }
 
     /**
-     * 指定したEmployeeデータを登録する.
+     * 指定したEmployeeデータを登録する
      * @param employee Employeeデータ
      * @return 登録したEmployeeデータ
      */
     @PostMapping
     public Employee createEmployee(@Valid @RequestBody Employee employee) {
-        if(employeeRepository.countByEmailId(employee.getEmailId()) == 0){
-            // メールアドレスが未登録であれば登録する
-            return employeeRepository.save(employee);
-        }else{
-            // 登録済みであればエラーを返す
-            return service.getEmployeeId(employee.getId()).orElseThrow(() -> new ResourceNotFoundException("Employee is registered email:" + employee.getEmailId()));
-        }
+        // 登録処理はserviceに任せる
+        return service.registerEmployee(employee);
     }
 
     /**
-     * 指定したユーザーデータを更新する.
+     * 指定したEmployeeデータを更新する
      * @param id ID
-     * @param employee Employeeデータ
+     * @param updateEmployee 更新するEmployeeデータ
      * @return 更新したEmployeeデータ
      */
     @PatchMapping("{id}")
-    public Employee updateEmployee(@PathVariable long id, @Valid @RequestBody Employee employee) {
-        Optional<Employee> employeeId = employeeRepository.findById(id);
-        if(employeeId.isPresent()) {
+    public Employee updateEmployee(@PathVariable long id, @Valid @RequestBody Employee updateEmployee) {
+        Employee employee = service.getEmployeeById(id);
+        if(employee != null) {
             // 指定したIDをもつEmployeeデータがあれば更新する
-            employee.setId(id);
-            return employeeRepository.save(employee);
+            updateEmployee.setId(id);
+            return employeeRepository.save(updateEmployee);
         }else {
-            // 指定したIDをもつEmployeeデータがなければエラーを返す
-            return employeeId.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
+            // 指定したIDをもつEmployeeデータがなければnullを返す
+            return null;
         }
     }
 
     /**
-     * 指定したIDをもつユーザーデータを削除する.
+     * 指定したIDをもつEmployeeデータを削除する.
      * @param id ID
      */
     @DeleteMapping("{id}")
     public void deleteEmployee(@PathVariable long id) {
-        Optional<Employee> employee = employeeRepository.findById(id);
+        Employee employee = service.getEmployeeById(id);
         // 指定したIDをもつEmployeeデータがあればそのユーザーデータを削除する
-        if(employee.isPresent()) {
+        if(employee != null) {
             employeeRepository.deleteById(id);
-        }else{
-            employee.orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
         }
     }
 }

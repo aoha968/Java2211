@@ -10,7 +10,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 // 例外処理を行うハンドラークラス
@@ -33,7 +32,7 @@ public class EmployeeExceptionHandler {
             MethodArgumentTypeMismatchException ex) {
         EmployeeExceptionResponse exceptionResponse = new EmployeeExceptionResponse(
                 ex.getMessage(), getStackTraceLog(ex.getStackTrace()), new Date());
-        return new ResponseEntity<EmployeeExceptionResponse>(
+        return new ResponseEntity<>(
                 exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -47,7 +46,7 @@ public class EmployeeExceptionHandler {
             MethodArgumentNotValidException ex) {
         EmployeeExceptionResponse exceptionResponse = new EmployeeExceptionResponse(
                 getMethodArgumentNoValidExceptionMsg(ex), ex.getMessage(), new Date());
-        return new ResponseEntity<EmployeeExceptionResponse>(
+        return new ResponseEntity<>(
                 exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -60,7 +59,7 @@ public class EmployeeExceptionHandler {
     public ResponseEntity<EmployeeExceptionResponse> handleException(Exception ex) {
         EmployeeExceptionResponse exceptionResponse = new EmployeeExceptionResponse(
                 ex.getMessage(), getStackTraceLog(ex.getStackTrace()), new Date());
-        return new ResponseEntity<EmployeeExceptionResponse>(
+        return new ResponseEntity<>(
                 exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
