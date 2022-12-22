@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,8 +74,10 @@ public class EmployeeController {
      * @param id ID
      */
     @DeleteMapping("{id}")
-    public void deleteEmployee(@PathVariable long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable long id) {
         // 削除処理はserviceに任せる
         service.deleteEmployee(id);
+        // 正常時は204 NO_CONTENTを返却
+        return ResponseEntity.noContent().build();
     }
 }

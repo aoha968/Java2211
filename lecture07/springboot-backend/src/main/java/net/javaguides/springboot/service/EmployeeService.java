@@ -5,9 +5,7 @@ import net.javaguides.springboot.model.Employee;
 import net.javaguides.springboot.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,8 +83,9 @@ public class EmployeeService {
      * @return Employeeデータ
      */
     public void deleteEmployee(long id) {
-        Employee employee = getEmployeeById(id);   // idに紐づくEmployeeがなければコール側でエラー返却してくれる
-        employeeRepository.deleteById(id);         // 指定したIDをもつEmployeeデータがあればそのユーザーデータを削除する
-        throw new ResponseStatusException(HttpStatus.NO_CONTENT);   // とりあえず204のレスポンスボディなしで返却
+        // 指定したIDがなければ例外を投げる
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee not exist width id:" + id));
+        // ここまでくる = 指定したIDをもつEmployeeデータがあることになるため、そのユーザーデータの削除を実施する
+        employeeRepository.deleteById(id);
     }
 }
