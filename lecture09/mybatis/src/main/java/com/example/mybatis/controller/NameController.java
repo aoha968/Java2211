@@ -9,14 +9,17 @@ import java.util.List;
 
 @RestController
 public class NameController {
-
     private final NameService nameService;
     public NameController(NameService nameService) {
         this.nameService = nameService;
     }
 
+    /**
+     * Namesリストを取得する
+     * @return Namesリスト
+     */
     @GetMapping("/names")
-    public List<Name> getNames() {
+    public List<String> getNames() {
         return nameService.findAll();
     }
 }

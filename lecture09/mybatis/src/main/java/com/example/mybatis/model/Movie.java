@@ -1,15 +1,17 @@
 package com.example.mybatis.model;
 
-public class Name {
+public class Movie {
     private int id;
     private String name;
+    private int publishedYear;
 
     /**
      * コンストラクタ
      */
-    public Name(int id, String name) {
+    public Movie(int id, String name, int publishedYear) {
         this.id = id;
         this.name = name;
+        this.publishedYear = publishedYear;
     }
 
     /**
@@ -21,5 +23,9 @@ public class Name {
 
     public String getName() {
         return name;
+    }
+
+    public int getPublishedYear() {
+        return publishedYear;
     }
 }

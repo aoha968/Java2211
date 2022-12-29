@@ -10,13 +10,16 @@ import java.util.List;
 public class NameServiceImpl implements NameService {
 
     private final NameMapper nameMapper;
-
     public NameServiceImpl(NameMapper nameMapper) {
         this.nameMapper = nameMapper;
     }
 
+    /**
+     * Nameを全て取得する
+     * @return Nameリスト
+     */
     @Override
-    public List<Name> findAll() {
+    public List<String> findAll() {
         return nameMapper.findAll();
     }
 }

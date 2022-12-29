@@ -5,6 +5,9 @@ import com.example.mybatis.model.Name;
 import java.util.List;
 
 public interface NameService {
-
-    List<Name> findAll();
+    /**
+     * Nameを全て取得する
+     * @return Nameリスト
+     */
+    List<String> findAll();
 }
