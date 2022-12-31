@@ -20,8 +20,8 @@
 ### プログラム仕様
  - `localhost:8080/names` にアクセスするとDBに登録されている名前をレスポンスとして返却する
  - `localhost:8080/movies` にアクセスするとDBに登録されている映画リスト(id、name, publishedYear)をレスポンスとして返却する
- - `localhost:8080/movies/{公開された年}` にアクセスするとDBに登録されている映画名をレスポンスとして返却する
- - `localhost:8080/movies/{公開された年}` で映画名がない場合は空で返却する
+ - `localhost:8080/movies/searchPublishedYear?year={公開された年}` にアクセスするとDBに登録されている映画名をレスポンスとして返却する
+ - `localhost:8080/movies/searchPublishedYear?year={公開された年}` で映画名がない場合は空で返却する
 
 ### 実行結果
  - `localhost:8080/names`
@@ -166,13 +166,13 @@
     }
 ]
  ```
-  - `localhost:8080/movies/1997`
+  - `localhost:8080/movies/searchPublishedYear?year=1997`
  ```
 [
     "名探偵コナン 時計じかけの摩天楼"
 ]
  ```
- - `localhost:8080/movies/1996`
+ - `localhost:8080/movies/searchPublishedYear?year=1996`
  ```
 []
  ```

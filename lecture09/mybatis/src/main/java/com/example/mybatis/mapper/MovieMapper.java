@@ -21,5 +21,5 @@ public interface MovieMapper {
      * @return 指定された年のMovieをリストで返却する
      */
     @Select("SELECT name FROM movies WHERE published_year=#{publishedYear}")
-    List<String> findMoviesByPublishedYear(long publishedYear);
+    List<String> findMoviesByPublishedYear(int publishedYear);
 }

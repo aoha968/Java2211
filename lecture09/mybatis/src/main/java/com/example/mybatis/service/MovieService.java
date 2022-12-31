@@ -16,5 +16,5 @@ public interface MovieService {
      * @param publishedYear 公開された年
      * @return 指定された年のMovieをリストで返却する
      */
-    List<String> findMoviesByPublishedYear(long publishedYear);
+    List<String> findMoviesByPublishedYear(int publishedYear);
 }
