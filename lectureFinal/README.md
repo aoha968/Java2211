@@ -9,6 +9,7 @@
  % docker compose up --build
  IntelliJ からPokeApplication.java を実行
  ```
+ Started PokeApplication が表示されてから、`http://localhost:8080`にアクセスすること
 
  ### 停止手順
  ```
